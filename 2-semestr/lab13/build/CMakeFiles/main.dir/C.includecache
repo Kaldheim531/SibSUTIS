@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/piratik228/lab13/functions.h
+stdio.h
+-
+stdlib.h
+-
+time.h
+-
+
+/home/piratik228/lab13/main.c
+functions.h
+/home/piratik228/lab13/functions.h
+time.h
+-
+
