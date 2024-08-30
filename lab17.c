@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+//Eto linux
 void countingsort(int array[], int size)
 {
     int output[size];
