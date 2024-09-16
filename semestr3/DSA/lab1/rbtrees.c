@@ -11,23 +11,7 @@ int getrand(int min, int max)
 {
     return (double)rand() / (RAND_MAX + 1.0) * (max - min) + min;
 }
-struct bstree *bstree_create(char* key, int value)
-{
-    struct bstree *new_node = (struct bstree*)malloc(sizeof(struct bstree));
 
-    if (new_node != NULL)
-    {
-        new_node->key = strdup(key);
-        if (new_node->key == NULL) {
-            free(new_node);
-            return NULL;
-        }
-        new_node->value = value;
-        new_node->left = NULL;
-        new_node->right = NULL;
-    }
-    return new_node;
-}
 
 struct rbtree* CreateNode(int key, char *value) {
     struct rbtree *node = (struct rbtree*)malloc(sizeof(struct rbtree));
@@ -152,8 +136,7 @@ struct rbtree *rbtree_add(struct rbtree *root, int key, char *value) {
     } else {
         parent->right = node;
     }
-    node ->parent = parent;
-
+    node->parent = parent;
 
     RBTree_Add_Fixup(&root, node);
     return root;

@@ -16,6 +16,7 @@ typedef enum { RED, BLACK } Color;
     struct rbtree *right;
     struct rbtree *parent;
 };
+
 struct rbtree *rbtree_add(struct rbtree *root, int key,char *value);
 struct rbtree *rbtree_lookup(struct rbtree *root,int key);
 struct rbtree *rbtree_delete(struct rbtree *root,int key);
@@ -28,5 +29,6 @@ struct rbtree* CreateNode(int key, char *value);
 void leftRotate(struct rbtree **root, struct rbtree *x);
 void rightRotate(struct rbtree **root, struct rbtree *x);
 void RBTree_Add_Fixup(struct rbtree **root, struct rbtree *z);
+
 double wtime();
 int getrand(int min, int max);

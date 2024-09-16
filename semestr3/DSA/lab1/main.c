@@ -7,64 +7,69 @@ int main()
 {
     srand(time(NULL));
 
-    int min = 0;
-    int max = N;
-    char **words = (char **)malloc(N * sizeof(char *)); // массив строк
+    
+        char **words = (char **)malloc(N * sizeof(char *)); // массив строк
+
     for (int i = 0; i < N; i++)
     {
         words[i] = (char *)malloc(5 * sizeof(char)); // каждая строка длиной 5 символов (четыре буквы + нулевой символ)
     }
 
-    FILE *file = fopen("output_asc.txt", "r");
+    FILE *file = fopen("output_desc.txt", "r");
+
     if (file == NULL){
         printf("Ошибка открытия файла\n");
         return 1;
     }
 
-    int num_words = 0;
+    
     char word[5];
 
-    while (fscanf(file, "%s", word) == 1)
+    for (int num_words = 0;fscanf(file, "%s", word) == 1 && num_words < N;num_words++)
     {
 
         strcpy(words[num_words], word);
-        num_words++;
+        
+       /* printf("%s %d\n",words[num_words],num_words);*/
     }
-    fclose(file);
 
+    fclose(file);
     printf("массив заполнен");
     puts("\n");
-    return 0;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
 
-    for (int i = 2, m = 0; i <= 200000; i++)
+    struct rbtree *root = NULL;
+
+    for (int i = 2, m = 0; i <= 50002; i++)
     {
-        bstree_add(tree1, words[i - 1], i - 1);
-       
+         root = rbtree_add(root, i-1, words[i-1]);
 
-        if (i % 10000 == 0)
+
+        if (i % 5000 == 0)
         {
             m += 1;
+            double start = wtime();
+            root = rbtree_add(root, i-1, words[i-1]);
+            double end = wtime();
 
-            // trie
-            double total_time_trie = 0;
+            printf("\n%.2d   n = %.5d; rbtree_lkup = %.9f ", m, i, end-start);
 
-            for (int j = 0; j <= i; j++)
-            {
-                double start = wtime();
-                char *w = words[getrand(0, i - 1)];
-                struct bstree *node1 = bstree_lookup(tree1, w);
-                double end = wtime();
-                total_time_trie += end - start;
-            }
-            double timer1 = total_time_trie / i;
-
-            // print
-
-            printf("\n%.2d   n = %.6d; trie_lkup_time = %.9f ", m, i, timer1);
-            FILE *file1 = fopen("lookup_time.dat", "a");
+            /*FILE *file1 = fopen("lookup_time.dat", "a");
             fprintf(file1, "%d %.8f \n", i, timer1);
-            fclose(file1);
+            fclose(file1);*/   
+                
         }
     }
+
+    puts("\nВставка завершена\n");
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
+   
+   for (int i = 0; i < N; i++)
+    {
+        free(words[i]);
+    }
+    free(words);
     
 }
