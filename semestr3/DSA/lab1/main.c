@@ -1,91 +1,70 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-typedef enum { RED, BLACK } Color;
-
- struct rbtree {
-    int key;
-    char *value;
-    Color color;
-    struct rbtree *left;
-    struct rbtree *right;
-    struct rbtree *parent;
-}
-//struct rbtree *satinelnode=NULL;
+#include "rbtrees.h"
+#define N 50100
+#define MAX_WORD_LENGHT 5
 
 
-struct rbtree* createNode(int key, char *value) {
-    struct rbtree *node = (struct rbtree*)malloc(sizeof(struct rbtree));
-    if (node == NULL) {
-        fprintf(stderr, "Ошибка выделения памяти\n");
-        exit(1);
+int main() 
+{
+    srand(time(NULL));
+
+    int min = 0;
+    int max = N;
+    char **words = (char **)malloc(N * sizeof(char *)); // массив строк
+    for (int i = 0; i < N; i++)
+    {
+        words[i] = (char *)malloc(5 * sizeof(char)); // каждая строка длиной 5 символов (четыре буквы + нулевой символ)
     }
-    node->key = key;
-    node->value = strdup(value);
-    node->color = RED;
-    node->left = NULL;
-    node->right = NULL;
-    node->parent = NULL;
-    return node;
-}
 
+    FILE *file = fopen("output_asc.txt", "r");
+    if (file == NULL){
+        printf("Ошибка открытия файла\n");
+        return 1;
+    }
 
+    int num_words = 0;
+    char word[5];
 
+    while (fscanf(file, "%s", word) == 1)
+    {
 
-struct rbtree *rbtree_add(struct rbtree *root, int key, char *value) {
-    struct rbtree *tree = root;
-    struct rbtree *parent = NULL;
+        strcpy(words[num_words], word);
+        num_words++;
+    }
+    fclose(file);
 
-    while (tree != NULL) {
-       parent = tree;
-        if (key < tree->key) {
-            tree = tree->left;
-        } else if (key > tree->key) {
-            tree = tree->right;
-        } else {
-            // Ключ уже присутствует в дереве
-            return root;
+    printf("массив заполнен");
+    puts("\n");
+    return 0;
+
+    for (int i = 2, m = 0; i <= 200000; i++)
+    {
+        bstree_add(tree1, words[i - 1], i - 1);
+       
+
+        if (i % 10000 == 0)
+        {
+            m += 1;
+
+            // trie
+            double total_time_trie = 0;
+
+            for (int j = 0; j <= i; j++)
+            {
+                double start = wtime();
+                char *w = words[getrand(0, i - 1)];
+                struct bstree *node1 = bstree_lookup(tree1, w);
+                double end = wtime();
+                total_time_trie += end - start;
+            }
+            double timer1 = total_time_trie / i;
+
+            // print
+
+            printf("\n%.2d   n = %.6d; trie_lkup_time = %.9f ", m, i, timer1);
+            FILE *file1 = fopen("lookup_time.dat", "a");
+            fprintf(file1, "%d %.8f \n", i, timer1);
+            fclose(file1);
         }
     }
-
-    struct rbtree *node = CreateNode(key, value);
     
-   if (parent == NULL) {
-        // Пустое дерево
-        root = node;
-    } else if (key < parent->key) {
-        parent->left = node;
-    } else {
-        parent->right = node;
-    }
-    node ->parent = parent;
-
-
-    RBTree_Add_Fixup(&root, node);
-    return root;
-}
-
-void rbtree_print_dfs(struct rbtree *root, int level) {
-    if (root == NULL) return;
-    rbtree_print_dfs(root->right, level + 1);
-    for (int i = 0; i < level; i++) {
-        printf("    ");
-    }
-    printf("%d (%s)\n", root->key, root->color == RED ? "RED" : "BLACK");
-    rbtree_print_dfs(root->left, level + 1);
-}
-
-int main() {
-    struct rbtree *root = NULL;
-
-    root = rbtree_add(root, 10, "aaab");
-    root = rbtree_add(root, 20, "bbbd");
-    root = rbtree_add(root, 30, "fffd");
-    root = rbtree_add(root, 15, "hhhs");
-    root = rbtree_add(root, 5, "gggd");
-
-    rbtree_print_dfs(root, 0);
-
-    return 0;
 }
