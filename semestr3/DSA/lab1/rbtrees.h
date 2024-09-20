@@ -29,6 +29,8 @@ struct rbtree* CreateNode(int key, char *value);
 void leftRotate(struct rbtree **root, struct rbtree *x);
 void rightRotate(struct rbtree **root, struct rbtree *x);
 void RBTree_Add_Fixup(struct rbtree **root, struct rbtree *z);
+void rbtree_delete_fixup(struct rbtree **root, struct rbtree *x);
+void rbtree_transplant(struct rbtree **root, struct rbtree *u, struct rbtree *v);
 
 double wtime();
 int getrand(int min, int max);
