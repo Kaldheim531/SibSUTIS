@@ -45,31 +45,24 @@ int main()
     {
          root = rbtree_add(root, i-1, words[i-1]);
 
-
-        if (i % 5000 == 0)
-        {
-            m += 1;
-            double start = wtime();
-            root = rbtree_add(root, i-1, words[i-1]);
-            double end = wtime();
-
-            printf("\n%.2d   n = %.5d; rbtree_lkup = %.9f ", m, i, end-start);
-
-            /*FILE *file1 = fopen("lookup_time.dat", "a");
-            fprintf(file1, "%d %.8f \n", i, timer1);
-            fclose(file1);*/   
-                
-        }
     }
+   
 
     puts("\nВставка завершена\n");
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    
-   
-   for (int i = 0; i < N; i++)
+    printf("%s\n",words[2225]);
+    struct rbtree *look =  rbtree_lookup(root, 2225);
+    printf("%s\n",look->value);
+     
+     
+    for (int i = 0; i < N; i++)
     {
         free(words[i]);
     }
     free(words);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
+   
+   
     
 }
