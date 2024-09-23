@@ -39,20 +39,51 @@ int main()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 
-    struct rbtree *root = NULL;
+    struct rbtree *tree = NULL;
 
     for (int i = 2, m = 0; i <= 50002; i++)
     {
-         root = rbtree_add(root, i-1, words[i-1]);
+         tree = rbtree_add(tree, i-1, words[i-1]);
+         int height = black_height(tree);
+         printf("Номер узла: %d, черная высота: %d\n", i + 1, height);
+         //check_rbtree_properties(tree);
 
     }
-   
 
-    puts("\nВставка завершена\n");
    
-    printf("%s\n",words[2225]);
-    struct rbtree *look =  rbtree_lookup(root, 2225);
-    printf("%s\n",look->value);
+   
+    
+    puts("\nВставка завершена\n");
+    
+    printf("Элемент %s\n",words[2225]);
+
+    struct rbtree *look =  rbtree_lookup(tree, 2225);
+    printf("Поиск элемента %s\n",look->value);
+
+    
+    struct rbtree *root = NULL;
+
+    root = rbtree_add(root, 14, "aaab");
+    root = rbtree_add(root, 11, "aaac");
+    root = rbtree_add(root, 15, "fsdf");
+    root = rbtree_add(root, 2, "jbff");
+    root = rbtree_add(root, 1, "wwww");
+    root = rbtree_add(root, 7, "ssss");
+    root = rbtree_add(root, 5, "aaaa");
+    root = rbtree_add(root, 8, "gggg");
+
+    
+   // check_rbtree_properties(root);
+    rbtree_print_dfs(root, 0);
+
+   
+    root = rbtree_delete(root, 8);
+
+    
+    puts("Дерево после удаления элемента:");
+
+    //check_rbtree_properties(root);
+    rbtree_print_dfs(root, 0);
      
      
     for (int i = 0; i < N; i++)

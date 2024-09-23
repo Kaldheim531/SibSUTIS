@@ -66,14 +66,15 @@ void rightRotate(struct rbtree **root, struct rbtree *x) {
 
 void RBTree_Add_Fixup(struct rbtree **root, struct rbtree *z) {
     while (z->parent != NULL && z->parent->color == RED) {
-        if (z->parent == z->parent->parent->left) {
+       if (z->parent == z->parent->parent->left) { 
             struct rbtree *y = z->parent->parent->right; // Uncle
-            if (y != NULL && y->color == RED) {
+            if (y != NULL && y->color == RED) { /*Вершина 𝑧 имеет родительский узел 𝑝, также красного цвета*/
                 // Case 1
                 z->parent->color = BLACK;
                 y->color = BLACK;
                 z->parent->parent->color = RED;
-                z = z->parent->parent;
+                z = z->parent->parent; /*Так как красный узел 𝑔 может иметь красного родителя, делаем его
+                                        текущим узлом и продвигаемся вверх по дереву*/
             } else {
                 if (z == z->parent->right) {
                     // Case 2 --> Case 3
@@ -108,6 +109,7 @@ void RBTree_Add_Fixup(struct rbtree **root, struct rbtree *z) {
     }
     (*root)->color = BLACK;
 }
+
 
 
 struct rbtree *rbtree_add(struct rbtree *root, int key, char *value) {
@@ -192,7 +194,8 @@ void rbtree_transplant(struct rbtree **root, struct rbtree *u, struct rbtree *v)
 
 void rbtree_delete_fixup(struct rbtree **root, struct rbtree *x) {
     while (x != *root && x->color == BLACK) {
-        if (x == x->parent->left) {
+        if (x == x->parent->left) { /*Дважды черная вершина 𝑥 является левым потомком свое-
+го родителя 𝑥.𝑝𝑎𝑟𝑒𝑛𝑡 черного цвета и имеет красный родственный узел 𝑤.*/
             struct rbtree *w = x->parent->right;
             if (w->color == RED) {
                 w->color = BLACK;
@@ -201,15 +204,21 @@ void rbtree_delete_fixup(struct rbtree **root, struct rbtree *x) {
                 w = x->parent->right;
             }
             if (w->left->color == BLACK && w->right->color == BLACK) {
+                /*Узел 𝑤 имеет черный цвет, оба его потомка также черные.*/
                 w->color = RED;
                 x = x->parent;
             } else {
                 if (w->right->color == BLACK) {
+                    /*Узел 𝑤 имеет черный цвет, 
+                    его левый потомок – красный,
+                    а правый – черный */
                     w->left->color = BLACK;
                     w->color = RED;
                     rightRotate(root, w);
                     w = x->parent->right;
                 }
+                /*Узел 𝑤 имеет черный цвет, 
+                его правый потомок – красный.*/
                 w->color = x->parent->color;
                 x->parent->color = BLACK;
                 w->right->color = BLACK;
@@ -255,9 +264,9 @@ struct rbtree *rbtree_delete(struct rbtree *root, int key) {
     struct rbtree *x;
     Color y_original_color = y->color;
 
-    if (z->left == NULL) {
+   if (z->left == NULL) {
         x = z->right;
-        rbtree_transplant(&root, z, z->right);
+        rbtree_transplant(&root, z, z->right); 
     } else if (z->right == NULL) {
         x = z->left;
         rbtree_transplant(&root, z, z->left);
@@ -287,4 +296,83 @@ struct rbtree *rbtree_delete(struct rbtree *root, int key) {
     free(z->value);
     free(z);
     return root;
+}
+
+void rbtree_free(struct rbtree *root) {
+    if (root == NULL) {
+        return;
+    }
+
+    // Рекурсивно освобождаем левое поддерево
+    rbtree_free(root->left);
+
+    // Рекурсивно освобождаем правое поддерево
+    rbtree_free(root->right);
+
+    // Освобождаем память, занятую значением (если оно выделено динамически)
+    if (root->value != NULL) {
+        free(root->value);
+    }
+
+    // Освобождаем память, занятую узлом
+    free(root);
+}
+
+int black_height(struct rbtree *node) {
+    if (node == NULL) {
+        return 1;  // Пустой узел считается черным
+    }
+
+    int left_black_height = black_height(node->left);
+    int right_black_height = black_height(node->right);
+
+    // Проверка на нарушение свойств красно-черного дерева
+    if (left_black_height != right_black_height) {
+        printf("Ошибка: разная черная высота в левом и правом поддереве\n");
+        return -1;  // Возвращаем -1, чтобы указать на ошибку
+    }
+
+    // Если текущий узел черный, увеличиваем черную высоту на 1
+    if (node->color==BLACK) {
+        return left_black_height + 1;
+    } else {
+        return left_black_height;
+    }
+}
+
+void check_red_properties(struct rbtree *node) {
+    if (node == NULL) return;
+
+    if (node->color == RED) {
+        if (node->left != NULL && node->left->color == RED) {
+            printf("Ошибка: два красных узла подряд (левый потомок).\n");
+        }
+        if (node->right != NULL && node->right->color == RED) {
+            printf("Ошибка: два красных узла подряд (правый потомок).\n");
+        }
+    }
+
+    check_red_properties(node->left);
+    check_red_properties(node->right);
+}
+
+
+void check_rbtree_properties(struct rbtree *root) {
+    if (root == NULL) return;
+
+    // 1. Корень всегда черный
+    if (root->color != BLACK) {
+        printf("Ошибка: корень не черный.\n");
+    }
+
+    // 2. Проверка на два красных узла подряд
+    check_red_properties(root);
+
+    // 3. Проверка черной высоты
+    int bh = black_height(root);
+    if (bh == -1) {
+        printf("Ошибка: разная черная высота в дереве.\n");
+    } else {
+        printf("Черная высота дерева: %d\n", bh);
+    }
 }
