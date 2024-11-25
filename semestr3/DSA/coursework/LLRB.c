@@ -84,9 +84,9 @@ Node* moveRedRight(Node* h) {
 
 // Восстановление инвариантов красно-черного дерева
 Node* balance(Node* h) {
-    if (isRed(h->right) && !isRed(h->left))    h = rotateLeft(h);
-    if (isRed(h->left) && isRed(h->left->left)) h = rotateRight(h);
-    if (isRed(h->left) && isRed(h->right))     flipColors(h);
+    if (isRed(h->right) && !isRed(h->left))    h = rotateLeft(h);  // Принудительное вращение влево
+    if (isRed(h->left) && isRed(h->left->left)) h = rotateRight(h); // Балансировка узла с 4-я потомками
+    if (isRed(h->left) && isRed(h->right))     flipColors(h); // Расщепление узла с 4-я потомками
     return h;
 }
 

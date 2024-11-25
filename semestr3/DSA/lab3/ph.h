@@ -1,10 +1,12 @@
+#ifndef PH_H
+#define PH_H
+
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <math.h>
-
-#define NEG_INFINITY -1 // Используем другое имя для "минус бесконечности"
-
+#include <string.h>
+// Структура для узла фибоначчиевой кучи
 struct fibheap {
     int key;
     char *value;
@@ -14,33 +16,21 @@ struct fibheap {
     struct fibheap *child;
     struct fibheap *left;
     struct fibheap *right;
+};
+
+// Структура для фибоначчиевой кучи
+struct FibHeap {
     struct fibheap *min;
     int nnodes;
 };
 
-struct fibheap* allocate_memory();
-void free_memory(struct fibheap *node);
-void fibheap_add_node_to_root_list(struct fibheap *node, struct fibheap *h);
-struct fibheap* fibheap_insert(struct fibheap *heap, int key, char *value);
-struct fibheap* fibheap_min(struct fibheap *heap);
-void fibheap_link_lists(struct fibheap *heap1, struct fibheap *heap2);
-struct fibheap* fibheap_union(struct fibheap *heap1, struct fibheap *heap2);
-void fibheap_remove_node_from_root_list(struct fibheap *node, struct fibheap *heap);
-struct fibheap* fibheap_delete_min(struct fibheap *heap);
-void fibheap_consolidate(struct fibheap *heap);
-int D(int n);
-void fibheap_link(struct fibheap *heap, struct fibheap *y, struct fibheap *x);
-void fibheap_decrease_key(struct fibheap *heap, struct fibheap *x, int newkey);
-void fibheap_cut(struct fibheap *heap, struct fibheap *x, struct fibheap *y);
-void fibheap_cascading_cut(struct fibheap *heap, struct fibheap *y);
-void fibheap_delete(struct fibheap *heap, struct fibheap *x);
+// Прототипы функций
+struct FibHeap *fibheap_insert(struct FibHeap *heap, int key, char *value);
+struct fibheap *fibheap_min(struct FibHeap *heap);
+struct FibHeap *fibheap_union(struct FibHeap *heap1, struct FibHeap *heap2);
+struct fibheap *fibheap_delete_min(struct FibHeap *heap);
+struct FibHeap *fibheap_decrease_key(struct FibHeap *heap, struct fibheap *node, int newkey);
+struct FibHeap *fibheap_delete(struct FibHeap *heap, int key);
+void fibheap_free(struct FibHeap *heap);
 
-
-
-/*
-struct fibheap *fibheap_insert(struct fibheap *heap, int key, char *value)
-struct fibheap *fibheap_min(struct fibheap *heap)
-struct fibheap *fibheap_union(struct fibheap *heap1, struct fibheap *heap2)
-struct fibheap *fibheap_delete_min(struct fibheap *heap)
-struct fibheap *fibheap_decrease_key(struct fibheap *heap, struct fibheap *node, int newkey)
-struct fibheap *fibheap_delete(struct fibheap *heap, int key)*/
+#endif // PH_H
