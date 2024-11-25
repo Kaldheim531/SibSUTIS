@@ -1,5 +1,8 @@
 #include "ph.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
 
 // Вспомогательная функция для выделения памяти под узел
 struct fibheap *allocate_node() {
@@ -68,9 +71,7 @@ void fibheap_swap(struct fibheap *x, struct fibheap *y) {
 
 // Функция для связывания двух узлов
 void fibheap_link(struct FibHeap *heap, struct fibheap *y, struct fibheap *x) {
-    /* Делаем y дочерним узлом x */
     fibheap_remove_node_from_root_list(y, heap);
-    
     y->parent = x;
     if (x->child == NULL) {
         x->child = y;
@@ -134,13 +135,13 @@ struct fibheap *fibheap_delete_min(struct FibHeap *heap) {
     if (x != NULL) {
         do {
             struct fibheap *next = x->right;
-            fibheap_add_node_to_root_list(x, heap->min); /* Добавляем дочерний узел x в список корней */
+            fibheap_add_node_to_root_list(x, heap->min);
             x->parent = NULL;
             x = next;
         } while (x != z->child);
     }
 
-    fibheap_remove_node_from_root_list(z, heap); /* Удаляем z из списка корней */
+    fibheap_remove_node_from_root_list(z, heap);
 
     if (z == z->right) {
         heap->min = NULL;
@@ -162,14 +163,13 @@ void fibheap_consolidate(struct FibHeap *heap) {
     if (w != NULL) {
         struct fibheap *next = w;
         do {
-            struct fibheap *x = next; /* Цикл по всем узлам списка корней */
+            struct fibheap *x = next;
             next = next->right;
             int d = x->degree;
             while (A[d] != NULL) {
-            next = next->right;
-                struct fibheap *y = A[d]; /* Степень y совпадает со степенью x */
+                struct fibheap *y = A[d];
                 if (x->key > y->key) {
-                    fibheap_swap(x, y); /* Обмениваем x и y */
+                    fibheap_swap(x, y);
                 }
                 fibheap_link(heap, y, x);
                 A[d] = NULL;
@@ -178,11 +178,11 @@ void fibheap_consolidate(struct FibHeap *heap) {
             A[d] = x;
         } while (next != w);
     }
-    
-    heap->min = NULL; /*Находим минимальный узел */
+
+    heap->min = NULL;
     for (int i = 0; i < max_degree; i++) {
         if (A[i] != NULL) {
-            fibheap_add_node_to_root_list(A[i], heap->min); /* Добавляем A[i] в список корней */
+            fibheap_add_node_to_root_list(A[i], heap->min);
             if (heap->min == NULL || A[i]->key < heap->min->key) {
                 heap->min = A[i];
             }
@@ -201,12 +201,10 @@ struct FibHeap *fibheap_decrease_key(struct FibHeap *heap, struct fibheap *node,
     node->key = newkey;
     struct fibheap *y = node->parent;
     if (y != NULL && node->key < y->key) {
-        /* Нарушены свойства min-heap: ключ родителя больше */
-        /* Вырезаем x и переносим его в список корней */
         fibheap_cut(heap, node, y);
         fibheap_cascading_cut(heap, y);
     }
-    /* Корректируем указатель на минимальный узел */
+
     if (node->key < heap->min->key) {
         heap->min = node;
     }

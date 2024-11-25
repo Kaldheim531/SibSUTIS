@@ -2,10 +2,7 @@
 #define PH_H
 
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
+
 // Структура для узла фибоначчиевой кучи
 struct fibheap {
     int key;

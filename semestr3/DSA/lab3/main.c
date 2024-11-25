@@ -1,4 +1,6 @@
 #include "ph.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int main() {
     struct FibHeap *heap = (struct FibHeap *)malloc(sizeof(struct FibHeap));
