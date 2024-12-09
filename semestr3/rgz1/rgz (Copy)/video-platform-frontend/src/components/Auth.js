@@ -24,34 +24,34 @@ const Auth = () => {
 
             navigate('/'); // Перенаправление на главную
         } catch (error) {
-            setError('Login failed. Please check your credentials.');
+            setError('Вход не выполнен. Пожалуйста, проверьте правильность введения данных.');
         }
     };
 
     return (
         <div style={styles.container}>
             <div style={styles.formContainer}>
-                <h2 style={styles.title}>Login</h2>
-                <input
+                <h2 style={styles.title}>Авторизация</h2>
+                <p style={styles.label}>Имя пользователя</p>
+                <InputWithFocus
                     type="text"
-                    placeholder="Username"
+                    placeholder="Имя пользователя"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    style={styles.input}
                 />
-                <input
+                <p style={styles.label}>Пароль</p>
+                <InputWithFocus
                     type="password"
-                    placeholder="Password"
+                    placeholder="Пароль"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    style={styles.input}
                 />
-                <button onClick={handleLogin} style={styles.button}>Login</button>
+                <button onClick={handleLogin} style={styles.button}>Войти</button>
                 {error && <p style={styles.error}>{error}</p>}
 
                 <p style={styles.registerText}>
-                    Don't have an account?{' '}
-                    <Link to="/register" style={styles.registerLink}>Register here</Link>
+                    Нет аккаунта?{' '}
+                    <Link to="/register" style={styles.registerLink}>Зарегистрироваться</Link>
                 </p>
             </div>
         </div>
@@ -74,8 +74,8 @@ const styles = {
     formContainer: {
         backgroundColor: 'rgba(255, 255, 255, 0.9)', // Белый фон с прозрачностью для улучшения контраста
         padding: '40px',
-        borderRadius: '10px',
-        width: '350px',
+        borderRadius: '40px',
+        width: '450px', // Увеличиваем ширину
         boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.1)', // Увеличенная тень для выделения формы
         display: 'flex',
         flexDirection: 'column',
@@ -83,39 +83,42 @@ const styles = {
     },
     title: {
         textAlign: 'center',
-        fontSize: '2.2rem',
-        marginBottom: '1.5rem',
+        fontSize: '2.5rem', // Увеличиваем размер шрифта
+        marginBottom: '2rem', // Увеличиваем отступ
         color: '#333',
         fontWeight: '600',
     },
+    label: {
+        width: '105%',
+        fontSize: '1.3rem', // Увеличиваем размер шрифта
+        color: '#000',
+        marginBottom: '5px',
+    },
     input: {
         width: '100%',
-        padding: '14px',
-        margin: '10px 0',
+        padding: '16px', // Увеличиваем отступ
+        margin: '12px 0', // Увеличиваем отступ
         border: '1px solid #ccc',
-        borderRadius: '8px',
-        fontSize: '1rem',
+        borderRadius: '20px',
+        fontSize: '1.1rem', // Увеличиваем размер шрифта
         outline: 'none',
         transition: '0.3s ease',
     },
     inputFocus: {
-        borderColor: '#007bff', // Изменение цвета при фокусе
-        boxShadow: '0 0 5px rgba(0, 123, 255, 0.5)', // Легкая тень при фокусе
+        borderColor: '#007bff',
+        boxShadow: '0 0 8px rgba(0, 123, 255, 0.7)', // Увеличиваем тень при фокусе
     },
     button: {
         width: '100%',
-        padding: '14px',
-        backgroundColor: '#007bff',
+        padding: '16px', // Увеличиваем отступ
+        backgroundColor: '#1e0aa1',
         color: '#fff',
-        fontSize: '1.2rem',
+        fontSize: '1.3rem', // Увеличиваем размер шрифта
         border: 'none',
-        borderRadius: '8px',
+        borderRadius: '20px',
         cursor: 'pointer',
-        marginTop: '15px',
+        marginTop: '20px', // Увеличиваем отступ
         transition: '0.3s ease',
-    },
-    buttonHover: {
-        backgroundColor: '#0056b3', // Темный синий при наведении
     },
     error: {
         color: 'red',
@@ -130,7 +133,7 @@ const styles = {
         color: '#333',
     },
     registerLink: {
-        color: '#007bff',
+        color: '#1e0aa1',
         textDecoration: 'none',
         fontWeight: 'bold',
     },

@@ -13,12 +13,12 @@ const UploadVideo = () => {
     const handleUpload = async () => {
         const token = localStorage.getItem('access_token');
         if (!token) {
-            alert('You need to log in.');
+            alert('Вы должны быть авторизованы.');
             return;
         }
     
         if (!file || !title || !description) {
-            setError('Please fill all fields and select a video.');
+            setError('Выберите файл.');
             return;
         }
 
@@ -34,18 +34,18 @@ const UploadVideo = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            setMessage('Video uploaded successfully!');
+            setMessage('Видео успешно загружено!');
             setTimeout(() => navigate('/videos'), 2000); // Перенаправление на страницу видео через 2 секунды
         } catch (error) {
-            console.error('Upload error:', error.response?.data || error.message);
-            setError('Error uploading video. Please try again.');
+            console.error('Ошибка загрузки:', error.response?.data || error.message);
+            setError('Ошибка загрузки видео. Попробуйте еще раз.');
         }
     };
 
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>Upload Your Video</h1>
+                <h1 style={styles.title}>Загрузить видео.</h1>
                 <div style={styles.formContainer}>
                     <input 
                         type="file" 
@@ -56,24 +56,24 @@ const UploadVideo = () => {
                         type="text" 
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
-                        placeholder="Video Title" 
+                        placeholder="Название видео" 
                         style={styles.input}
                     />
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Video Description"
+                        placeholder="Описание"
                         style={styles.textarea}
                     />
                     {error && <p style={styles.error}>{error}</p>}
                     {message && <p style={styles.message}>{message}</p>}
                     <button onClick={handleUpload} style={styles.uploadButton}>
-                        Upload Video
+                        Загрузить
                     </button>
                 </div>
             </div>
             <div style={styles.backLink}>
-                <button onClick={() => navigate('/')} style={styles.backButton}>Back to Home</button>
+                <button onClick={() => navigate('/')} style={styles.backButton}>Главная</button>
             </div>
         </div>
     );
@@ -89,7 +89,7 @@ const styles = {
         backgroundImage: 'url(/fon.png)', // Фон для страницы
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        padding: '20px',
+        padding: '100px',
         color: '#fff',
     },
     header: {
@@ -98,14 +98,14 @@ const styles = {
         alignItems: 'center',
         maxWidth: '600px',
         marginTop: '50px',
-        padding: '30px',
+        padding: '50px',
         borderRadius: '10px',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
     },
     title: {
-        fontSize: '2rem',
-        marginBottom: '20px',
+        fontSize: '4rem',
+        marginBottom: '40px',
     },
     formContainer: {
         width: '100%',
@@ -117,10 +117,10 @@ const styles = {
         padding: '12px',
         fontSize: '1rem',
         width: '100%',
-        marginBottom: '10px',
-        borderRadius: '5px',
+        marginBottom: '40px',
+        borderRadius: '20px',
         border: '1px solid #ddd',
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         color: '#333',
     },
     textarea: {
@@ -128,19 +128,19 @@ const styles = {
         fontSize: '1rem',
         width: '100%',
         height: '120px',
-        marginBottom: '20px',
-        borderRadius: '5px',
+        marginBottom: '40px',
+        borderRadius: '20px',
         border: '1px solid #ddd',
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         color: '#333',
     },
     uploadButton: {
-        padding: '12px 20px',
-        fontSize: '1rem',
-        backgroundColor: '#28a745',
+        padding: '20px 20px',
+        fontSize: '1.5rem',
+        backgroundColor: '#210bb3',
         color: '#fff',
         border: 'none',
-        borderRadius: '5px',
+        borderRadius: '20px',
         cursor: 'pointer',
         width: '100%',
     },
@@ -148,12 +148,12 @@ const styles = {
         marginTop: '20px',
     },
     backButton: {
-        padding: '10px 20px',
-        fontSize: '1rem',
-        backgroundColor: '#007bff',
+        padding: '20px 100px',
+        fontSize: '2rem',
+        backgroundColor: '#210bb3',
         color: '#fff',
         border: 'none',
-        borderRadius: '5px',
+        borderRadius: '20px',
         cursor: 'pointer',
     },
     error: {

@@ -4,13 +4,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const VideoDetail = () => {
-    const { id } = useParams(); // Получаем id видео из URL
+    const { id } = useParams();
     const [video, setVideo] = useState(null);
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
-    const navigate = useNavigate(); // Хук для навигации
+    const navigate = useNavigate();
 
-    // Функция для загрузки видео и комментариев
     useEffect(() => {
         const fetchVideoAndComments = async () => {
             try {
@@ -21,13 +20,12 @@ const VideoDetail = () => {
                 });
                 setVideo(videoResponse.data);
 
-                // Загрузка комментариев отдельно
                 const commentsResponse = await api.get(`videos/${id}/comments/`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     },
                 });
-                setComments(commentsResponse.data); // Устанавливаем комментарии из ответа
+                setComments(commentsResponse.data);
             } catch (error) {
                 console.error('Error fetching video or comments:', error);
             }
@@ -35,29 +33,23 @@ const VideoDetail = () => {
         fetchVideoAndComments();
     }, [id]);
 
-    // Функция отправки комментария
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
-    
-        if (!comment.trim()) {
-            console.log("Comment is empty!");
-            return;
-        }
-    
+
+        if (!comment.trim()) return;
+
         try {
             const token = localStorage.getItem('access_token');
-            const newComment = await submitComment(id, comment, token); // Ждем ответ сервера
-    
-            setComments((prevComments) => [...prevComments, newComment]); // Добавляем реальный ответ сервера
+            const newComment = await submitComment(id, comment, token);
+            setComments((prevComments) => [...prevComments, newComment]);
             setComment('');
         } catch (error) {
-            console.error('Error submitting comment:', error);
+            console.error('Ошибка отправки сообщения:', error);
         }
     };
 
-    // Функция для возвращения на предыдущую страницу
     const handleGoBack = () => {
-        navigate(-1); // Возвращаемся на предыдущую страницу
+        navigate(-1);
     };
 
     if (!video) {
@@ -66,51 +58,54 @@ const VideoDetail = () => {
 
     return (
         <div style={styles.container}>
-            <div style={styles.header}>
-                <h1 style={styles.title}>{video.title}</h1>
-            </div>
-            <div style={styles.videoCard}>
-                <video src={video.video_file} controls style={styles.videoPlayer} />
-                <h3 style={styles.commentTitle}>Comments:</h3>
-                {comments.length > 0 ? (
-                    comments.map((comment) => (
-                        <div key={comment.id} style={styles.commentCard}>
-                            {/* Отображаем имя пользователя, если оно есть */}
-                            <p style={styles.commentUser}>Posted by: {comment.user ? comment.user : 'Unknown'}</p>
-                            <p style={styles.commentText}>{comment.text}</p>
+            <header style={styles.header}>
+
+                <button onClick={handleGoBack} style={styles.backButton}>
+                    Назад
+                </button>
+            </header>
+            <main style={styles.main}>
+                <div style={styles.videoAndChatContainer}>
+                    <div style={styles.videoContainer}>
+                        <video src={video.video_file} controls style={styles.videoPlayer} />
+                    </div>
+                    <div style={styles.chatContainer}>
+                        <h3 style={styles.chatTitle}>Чат</h3>
+                        <div style={styles.comments}>
+                            {comments.length > 0 ? (
+                                comments.map((comment) => (
+                                    <div key={comment.id} style={styles.comment}>
+                                        <p style={styles.commentUser}>{comment.user || 'Аноним'}:</p>
+                                        <p style={styles.commentText}>{comment.text}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p style={styles.noComments}>Нет комментариев</p>
+                            )}
                         </div>
-                    ))
-                ) : (
-                    <p style={styles.noComments}>No comments yet</p>
-                )}
-                <form onSubmit={handleCommentSubmit} style={styles.commentForm}>
-                    <textarea
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        placeholder="Write a comment..."
-                        style={styles.commentInput}
-                    />
-                    <button type="submit" style={styles.commentButton}>Add Comment</button>
-                </form>
-            </div>
-            
-            {/* Кнопка для возврата на предыдущую страницу */}
-            <button onClick={handleGoBack} style={styles.backButton}>
-                Back to Video List
-            </button>
+                        <form onSubmit={handleCommentSubmit} style={styles.commentForm}>
+                            <textarea
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                placeholder="Напишите сообщение..."
+                                style={styles.textarea}
+                            />
+                            <button type="submit" style={styles.sendButton}>
+                                Отправить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </main>
         </div>
     );
 };
 
-// Функция отправки комментария
 const submitComment = async (videoId, text, token) => {
     try {
         const response = await axios.post(
             `http://localhost:8000/api/videos/${videoId}/comments/`,
-            {
-                text: text.trim(),  // Отправляем только текст комментария
-                video: videoId,     // Указываем ID видео
-            },
+            { text: text.trim(), video: videoId },
             {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -118,11 +113,10 @@ const submitComment = async (videoId, text, token) => {
                 },
             }
         );
-        console.log('Comment posted:', response.data);
-        return response.data;  // Возвращаем только что созданный комментарий
+        return response.data;
     } catch (error) {
         console.error('Error posting comment:', error.response?.data || error.message);
-        throw error; // Для обработки ошибки в основном компоненте
+        throw error;
     }
 };
 
@@ -130,100 +124,102 @@ const styles = {
     container: {
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        minHeight: '100vh', // Используем min-height, чтобы контейнер мог расти
-        padding: '20px',
-        color: '#fff',
-        backgroundImage: 'url(/fon.png)', // Фон для страницы
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        overflowY: 'auto', // Разрешаем вертикальную прокрутку
-        boxSizing: 'border-box', // Учитываем паддинги в расчете размеров
+        minHeight: '100vh',
+        color: '#999',
+        fontFamily: 'Arial, sans-serif',
     },
     header: {
         display: 'flex',
-        flexDirection: 'column',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '30px',
+        padding: '10px 20px',
     },
-    title: {
-        fontSize: '2.5rem',
-        marginBottom: '10px',
+    logo: {
+        height: '40px',
+    },
+    backButton: {
+        backgroundColor: '#210bb3',
         color: '#fff',
+        border: 'none',
+        padding: '15px 30px',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        marginLeft : '1500px',
     },
-    videoCard: {
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    main: {
+        display: 'flex',
+        flex: 1,
         padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-        color: '#fff',
-        width: '100%',
-        maxWidth: '800px', // Ограничиваем максимальную ширину
+    },
+    videoAndChatContainer: {
+        display: 'flex',
+        flex: 1,
+    },
+    videoContainer: {
+        flex: 2,
     },
     videoPlayer: {
         width: '100%',
-        borderRadius: '8px',
+        marginTop: '100px',
     },
-    commentSection: {
-        marginTop: '20px',
+    chatContainer: {
+        flex: 1,
+        backgroundColor: '#000000',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '550px',
+        marginTop: '100px',
     },
-    commentTitle: {
+    chatTitle: {
         fontSize: '1.5rem',
-        marginBottom: '10px',
+        marginBottom: '20px',
+        color: '#fff',
     },
-    commentCard: {
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    comments: {
+        flex: 1,
+        overflowY: 'auto',
+        marginBottom: '20px',
+        maxHeight: '400px',
+    },
+    comment: {
+        backgroundColor: '#222',
         padding: '10px',
         marginBottom: '10px',
         borderRadius: '5px',
     },
     commentUser: {
-        fontSize: '1.1rem',
-        color: '#ccc', // Цвет для имени пользователя
         fontWeight: 'bold',
         marginBottom: '5px',
     },
     commentText: {
-        fontSize: '1rem',
-    },
-    noComments: {
-        fontSize: '1.2rem',
-        color: '#fff',
+        fontSize: '0.9rem',
     },
     commentForm: {
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: '20px',
+        gap: '10px',
     },
-    commentInput: {
-        width: '80%',
-        height: '50px',
-        marginBottom: '10px',
+    textarea: {
+        width: '100%',
+        height: '80px',
         padding: '10px',
+        borderRadius: '5px',
+        border: '1px solid #555',
+        color: '#fff',
+        backgroundColor: '#fff',
         fontSize: '1rem',
-        borderRadius: '5px',
+        boxSizing: 'border-box', // Добавлено для корректного расчета ширины
     },
-    commentButton: {
+    sendButton: {
+        width: '100%', // Изменено на 100% для растягивания по ширине
         padding: '10px 20px',
-        backgroundColor: '#007bff',
+        backgroundColor: '#210bb3',
         color: '#fff',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
-    },
-    backButton: {
-        marginTop: '20px',
-        padding: '10px 20px',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        fontSize: '1.2rem',
     },
 };
 
 export default VideoDetail;
-

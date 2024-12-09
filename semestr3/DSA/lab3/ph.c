@@ -28,7 +28,7 @@ void fibheap_add_node_to_root_list(struct fibheap *node, struct fibheap *h) {
         h->right = node;
         node->right = h;
         node->left = h;
-    } else { // Список h содержит более одного корня
+    } else {    // Список h содержит более одного корня
         struct fibheap *lnode = h->left;
         h->left = node;
         node->right = h;

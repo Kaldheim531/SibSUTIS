@@ -31,7 +31,7 @@ const VideoList = () => {
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>Video Gallery</h1>
+                <h1 style={styles.title}>Ваши видео</h1>
             </div>
             <div style={styles.videoList}>
                 {videos.length > 0 ? (
@@ -49,20 +49,20 @@ const VideoList = () => {
                                     />
                                     {/* Добавляем полупрозрачный слой, чтобы сделать видео похожим на кнопку */}
                                     <div style={styles.overlay}>
-                                        <span style={styles.overlayText}>Play Video</span>
+                                        <span style={styles.overlayText}>Воспроизвести</span>
                                     </div>
                                 </div>
                             </Link>
                         </div>
                     ))
                 ) : (
-                    <p style={styles.noVideos}>No videos available at the moment.</p>
+                    <p style={styles.noVideos}>Нет ни одного загруженного видео.</p>
                 )}
             </div>
 
             {/* Кнопка для возврата на главную страницу */}
             <Link to="/" style={styles.backButton}>
-                Back to Home
+                Главная
             </Link>
         </div>
     );
@@ -101,20 +101,20 @@ const styles = {
         margin: '0 auto',
     },
     videoCard: {
-        backgroundColor: 'rgba(0, 0, 0, 0.6)', // Прозрачный фон для карточки
-        padding: '20px',
-        borderRadius: '8px',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Прозрачный фон для карточки
+        padding: '15px',
+        borderRadius: '20px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
         color: '#fff',
     },
     videoTitle: {
-        fontSize: '1.8rem',
-        marginBottom: '10px',
+        fontSize: '2rem',
+        marginBottom: '20px',
         fontWeight: 'bold',
     },
     videoDescription: {
-        fontSize: '1rem',
-        marginBottom: '10px',
+        fontSize: '1.2rem',
+        marginBottom: '30px',
         color: '#ccc',
     },
     videoWrapper: {
@@ -122,7 +122,7 @@ const styles = {
     },
     videoPlayer: {
         width: '100%',
-        borderRadius: '8px',
+        borderRadius: '20px',
     },
     overlay: {
         position: 'absolute',
@@ -130,7 +130,7 @@ const styles = {
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Темный полупрозрачный слой
+        backgroundColor: 'rgba(0, 0, 0, 0)', // Темный полупрозрачный слой
         color: '#fff',
         display: 'flex',
         justifyContent: 'center',
@@ -154,13 +154,13 @@ const styles = {
     },
     backButton: {
         marginTop: '20px',
-        padding: '10px 20px',
-        backgroundColor: '#007bff',
+        padding: '20px 40px',
+        backgroundColor: '#210bb3',
         color: '#fff',
         textDecoration: 'none',
-        borderRadius: '5px',
+        borderRadius: '20px',
         cursor: 'pointer',
-        fontSize: '1.2rem',
+        fontSize: '1.7rem',
     },
 };
 
