@@ -1,0 +1,85 @@
+/* Pipeline.css */
+
+body {
+  background-color: #2a2f23;
+  color: #c3e88d;
+  font-family: Arial, sans-serif;
+}
+
+.pipeline-container {
+  background-color: #2a2f23;
+  color: #c3e88d;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.pipeline-header {
+  text-align: center;
+  color: #9ccc65;
+}
+
+.pipeline-button {
+  background-color: #6c757d; /* Серый */
+  color: #fff; /* Белый текст */
+  border: none; /* Без границ */
+  border-radius: 5px; /* Закругленные углы */
+  padding: 10px 20px; /* Отступы */
+  cursor: pointer; /* Указатель при наведении */
+  transition: background-color 0.3s ease; /* Плавный переход цвета */
+}
+
+/* Стиль при наведении */
+.pipeline-button:hover {
+  background-color: #5a6268; /* Темнее серого */
+}
+
+/* Убедитесь, что задания изменяют цвет */
+.pipeline-task {
+  background-color: #394a34; /* Зеленовато-серый */
+  color: #fff;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  border: 1px solid #6c757d;
+}
+
+.pipeline-task:hover {
+  background-color: #5a6268; /* Темнее при наведении */
+}
+.pipeline-input {
+  padding: 5px;
+  margin-right: 10px;
+  border: 1px solid #9ccc65;
+  background-color: #394a34;
+  color: #c3e88d;
+}
+
+.pipeline-task-logs {
+  background-color: #394a34;
+  border: 1px solid #9ccc65;
+  padding: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.reactflow-container {
+  height: 400px;
+  width: 800px;
+  margin: auto;
+  border: 1px solid #9ccc65;
+}
+
+.reactflow-container .react-flow__node {
+  background-color: #394a34;
+  color: #fff;
+}
+
+.reactflow-container .react-flow__controls,
+.reactflow-container .react-flow__minimap {
+  background-color: #2a2f23;
+  color: #9ccc65;
+}
+
+.reactflow-container .react-flow__background {
+  background-color: #394a34;
+}
