@@ -2,43 +2,30 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define EPSILON 1e-6  // Точность
-#define MAX_ITER 1000  // Максимальное количество итераций
+#define EPSILON 0.01  
+#define MAX_ITER 1000  
 
-// Функция для чтения матрицы и вектора из файла
-void readMatrixFromFile(const char* filename, double*** A, double** B, int* N) {
-    FILE* file = fopen(filename, "r");
-    if (!file) {
-        perror("Ошибка открытия файла");
-        exit(EXIT_FAILURE);
-    }
+void readMatrixFromFile(const char* filename, double*** A, double** B, int* N){
+    FILE* file=fopen("input.txt","r");
+    fscanf(file,"%d",N);
 
-    // Чтение размера матрицы
-    fscanf(file, "%d", N);
-
-    // Выделение памяти для матрицы A и вектора B
     *A = (double**)malloc((*N) * sizeof(double*));
     for (int i = 0; i < *N; i++) {
         (*A)[i] = (double*)malloc((*N) * sizeof(double));
     }
     *B = (double*)malloc((*N) * sizeof(double));
-
-    // Чтение матрицы A
+    
     for (int i = 0; i < *N; i++) {
         for (int j = 0; j < *N; j++) {
-            fscanf(file, "%lf", &(*A)[i][j]);
+            fscanf(file, "%lf", &(*A)[i][j]); 
         }
-    }
-
-    // Чтение вектора B
-    for (int i = 0; i < *N; i++) {
         fscanf(file, "%lf", &(*B)[i]);
     }
 
     fclose(file);
 }
 
-// Метод Зейделя
+
 void seidel(double** A, double* B, double* X, int N) {
     int i, j, iter;
     double sum, dx;
@@ -55,9 +42,11 @@ void seidel(double** A, double* B, double* X, int N) {
             double new_x = (B[i] - sum) / A[i][i];
             dx += fabs(new_x - X[i]);
             X[i] = new_x;
+            printf("k%d X[%d] = %lf ",iter,i+1,X[i]);
         }
+        puts("\n");
 
-        // Проверка на сходимость
+        
         if (dx < EPSILON) {
             printf("Метод Зейделя сошелся за %d итераций.\n", iter + 1);
             return;
@@ -73,25 +62,25 @@ int main() {
     double* X;
     int N;
 
-    // Чтение матрицы и вектора из файла
+    
     readMatrixFromFile("input.txt", &A, &B, &N);
 
-    // Выделение памяти для начального приближения X
+    
     X = (double*)malloc(N * sizeof(double));
     for (int i = 0; i < N; i++) {
         X[i] = 0.0;  // Начальное приближение
     }
 
-    // Решение системы методом Зейделя
+
     seidel(A, B, X, N);
 
-    // Вывод решения
+    
     printf("Решение:\n");
     for (int i = 0; i < N; i++) {
         printf("X[%d] = %lf\n", i, X[i]);
     }
 
-    // Освобождение памяти
+    
     for (int i = 0; i < N; i++) {
         free(A[i]);
     }
@@ -101,3 +90,4 @@ int main() {
 
     return 0;
 }
+
