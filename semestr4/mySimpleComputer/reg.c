@@ -1,5 +1,4 @@
-#include "reg.h"
-
+#include "mySimpleComputer.h"
 static int accumulator = 0;
 static int instruction_counter = 0;
 static int flag_register = 0;

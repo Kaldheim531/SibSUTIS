@@ -1,5 +1,6 @@
-
-
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
 // Память
 #define MEMORY_SIZE 128
 
@@ -35,3 +36,8 @@ int sc_commandEncode(int sign, int command, int operand, int *value);
 int sc_commandDecode(int value, int *sign, int *command, int *operand);
 int sc_commandValidate(int command);
 
+void printCell(int address);
+void printFlags(void);
+void printDecodedCommand(int value);
+void printAccumulator(void);
+void printCounters(void);

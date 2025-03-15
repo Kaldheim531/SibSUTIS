@@ -1,5 +1,4 @@
-#include "deviceControl.h"
-#include "../include/mySimpleComputer.h"
+#include "mySimpleComputer.h"
 int sc_commandEncode(int sign, int command, int operand, int *value) {
     if (value == NULL || sign < 0 || sign > 1 || command < 0 || command > COMMAND_MASK || operand < 0 || operand > OPERAND_MASK) {
         return -1;

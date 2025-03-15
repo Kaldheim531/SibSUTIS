@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include "input_output.h"
 #include "mySimpleComputer.h"
 
 void printCell(int address) {
