@@ -26,11 +26,11 @@ int sc_regSet(int reg, int value) {
 }
 
 int sc_regGet(int reg, int *value) {
-    if (reg != FLAG_OVERFLOW &&
+    if ((reg != FLAG_OVERFLOW &&
         reg != FLAG_DIVISION_BY_ZERO &&
         reg != FLAG_MEMORY_ERROR &&
         reg != FLAG_INVALID_COMMAND &&
-        reg != FLAG_IGNORE_CLOCK ||
+        reg != FLAG_IGNORE_CLOCK )||
         value == NULL) {
         return -1;
     }

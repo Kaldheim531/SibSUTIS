@@ -1,62 +1,92 @@
 #include "mySimpleComputer.h"
-#include <stdio.h>
+
 
 int main() {
-    // Инициализация
+    //a
     sc_memoryInit();
     sc_accumulatorInit();
     sc_icounterInit();
     sc_regInit();
 
-    // Установка значений в память
-    for (int i = 0; i < 10; i++) {
-        sc_memorySet(i, i + 1);
-    }
+    //b
+    sc_memorySet(0, 0x1234);
+    sc_memorySet(1, 0x5678);
+    sc_memorySet(2, 0x9ABC);
+    sc_memorySet(3, 0xDEF0);
+    sc_memorySet(4, 0x1111);
+    sc_memorySet(5, 0x2222);
+    sc_memorySet(6, 0x3333);
+    sc_memorySet(7, 0x4444);
+    sc_memorySet(8, 0x5555);
+    sc_memorySet(9, 0x6666);
 
-    // Вывод содержимого памяти
     printf("Memory contents:\n");
     for (int i = 0; i < 10; i++) {
         printCell(i);
+        if ((i + 1) % 10 == 0) printf("\n");
     }
 
-    // Попытка установить недопустимое значение в память
-    int result = sc_memorySet(150, 100);
-    printf("Attempt to set invalid memory address: %s\n", result == -1 ? "Failed" : "Success");
+    // c
+    int status = sc_memorySet(128, 0xFFFF);
+    printf("Status of setting invalid memory address: %d\n", status);
 
-    // Установка флагов
+    // d
     sc_regSet(FLAG_OVERFLOW, 1);
     sc_regSet(FLAG_DIVISION_BY_ZERO, 1);
     printFlags();
 
-    // Попытка установить некорректный флаг
-    result = sc_regSet(0x20, 1);
-    printf("Attempt to set invalid flag: %s\n", result == -1 ? "Failed" : "Success");
+    // e
+    status = sc_regSet(0x20, 1);
+    printf("Status of setting invalid flag: %d\n", status);
 
-    // Установка значения аккумулятора
-    sc_accumulatorSet(123);
+    // f
+    sc_accumulatorSet(42);
     printAccumulator();
 
-    // Попытка установить недопустимое значение аккумулятора
-    result = sc_accumulatorSet(-1);
-    printf("Attempt to set invalid accumulator value: %s\n", result == -1 ? "Failed" : "Success");
+    // g
+    status = sc_accumulatorSet(-1);
+    printf("Status of setting invalid accumulator value: %d\n", status);
 
-    // Установка значения счетчика команд
+    // h
     sc_icounterSet(10);
     printCounters();
 
-    // Попытка установить недопустимое значение счетчика команд
-    result = sc_icounterSet(150);
-    printf("Attempt to set invalid instruction counter value: %s\n", result == -1 ? "Failed" : "Success");
+    // i
+    status = sc_icounterSet(128);
+    printf("Status of setting invalid instruction counter value: %d\n", status);
 
-    // Декодирование значения ячейки памяти
-    int value;
-    sc_memoryGet(5, &value);
-    printDecodedCommand(value);
+    // j
+    int sign, command, operand;
+    sc_commandDecode(0x1234, &sign, &command, &operand);
+    printf("Decoded memory cell: sign=%d, command=%d, operand=%d\n", sign, command, operand);
 
-    // Кодирование команды
-    int encoded_value;
-    sc_commandEncode(0, 0x10, 0x20, &encoded_value);
-    printDecodedCommand(encoded_value);
+    int accValue;
+    sc_accumulatorGet(&accValue);
+    printf("Decoded accumulator value: %d\n", accValue);
+
+    // k
+    int encodedValue;
+    sc_commandEncode(1, 10, 20, &encodedValue);
+    printDecodedCommand(encodedValue);
+
+
+    status = sc_memorySave("memory.bin");
+    if (status == 0) {
+        printf("Memory saved to memory.bin\n");
+    } else {
+        printf("Failed to save memory to memory.bin\n");
+    }
+
+
+    status = sc_memoryLoad("memory.bin");
+    if (status == 0) {
+        printf("Memory loaded from memory.bin\n");
+    } else {
+        printf("Failed to load memory from memory.bin\n");
+    }
+
+
+    printFlags();
 
     return 0;
 }
