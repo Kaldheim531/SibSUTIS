@@ -101,12 +101,10 @@ void gauss_method(double **a, double *b, double *x, int n) {
 
 int main() {
     int n;
-
-    // Запрос размерности матрицы
     printf("Введите размерность матрицы (n): ");
     scanf("%d", &n);
 
-    // Выделение памяти для матрицы A и векторов B и X
+    
     double **a = (double **)malloc(n * sizeof(double *));
     for (int i = 0; i < n; i++) {
         a[i] = (double *)malloc(n * sizeof(double));
@@ -114,15 +112,14 @@ int main() {
     double *b = (double *)malloc(n * sizeof(double));
     double *x = (double *)malloc(n * sizeof(double));
 
-    // Чтение данных из файла
+    
     const char *filename = "input.txt";
     read_matrix_from_file(a, b, n, filename);
 
-    // Вывод исходной матрицы
     printf("Исходная система:\n");
     print_matrix(a, b, n);
 
-    // Проверка на вырожденность матрицы
+    
     double det = determinant(a, n);
     if (fabs(det) < 1e-9) {
         printf("Ошибка: матрица вырождена (определитель = %.2e).\n", det);
@@ -130,16 +127,16 @@ int main() {
     }
     printf("Определитель матрицы: %.2e\n", det);
 
-    // Решение системы методом Гаусса
+   
     gauss_method(a, b, x, n);
 
-    // Вывод результатов
+    
     printf("Решение системы:\n");
     for (int i = 0; i < n; i++) {
         printf("x[%d] = %.4f\n", i, x[i]);
     }
 
-    // Освобождение памяти
+   
     for (int i = 0; i < n; i++) free(a[i]);
     free(a);
     free(b);
